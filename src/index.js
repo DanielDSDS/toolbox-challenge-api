@@ -4,6 +4,7 @@ const http = require('http');
 const morgan = require('morgan');
 const cors = require('compression');
 const compression = require('cors');
+const filesRouter = require('./routes/index');
 
 // Startup
 const app = express();
@@ -12,6 +13,9 @@ dotenv.config();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+//Register routes
+app.use(filesRouter);
 
 const port = process.env.PORT || 5000;
 
