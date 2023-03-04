@@ -7,7 +7,7 @@ Para utilizar este proyecto es necesaria la instalación de [NodeJS v14 y npm v6
 ## Instalación
 
  1. ### Clonar el repositorio:
-	`git clone https://github.com/di-alba/toolbox-challenge-frontend.git`
+	`git clone https://github.com/di-alba/toolbox-challenge-api.git`
  2. ### Instalar dependencias
 	`npm install`
  3. ### Iniciar servidor
