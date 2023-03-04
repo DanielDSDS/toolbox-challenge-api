@@ -1,40 +1,60 @@
-const isLineEmpty = require('../utils/utils');
+const formatSingleFile = require('../utils/utils');
+const axios = require('axios');
+const bearerToken = 'Bearer aSuperSecretKey'
+
 
 /**
- * @description Parse and organize each individual file information 
- * @param  {string} file file information 
- * @returns {Array} Rreturns array of objects with each file information 
+ * @description Parse each file's information and group them together  
+ * @returns {string} Rreturns all files information and lines  
  */
-const parseFileService = (file) => {
-  //Get current file name
-  const fileName = file.split(',')[0];
+const parseAllFilesService = async () => {
+  const parsedFilesInfo = []
+  const { files } = await getFileNames();
 
-  //Separate each line from file 
-  const separatedLines = file.split('\n');
-  const lines = [];
-
-  //Traverse each line from the array
-  for (let i = 0; i < separatedLines.length; i++) {
-    //If there is less than 3 commas stop parsing the file 
-    if ((separatedLines[i].split(',').length - 1) >= 3) {
-      //Store content of the line if there were no errors 
-      if (!isLineEmpty(separatedLines[i].split(','))) {
-        //Group each property from line into an array
-        lines.push({
-          text: separatedLines[i].split(',')[1],
-          number: separatedLines[i].split(',')[2],
-          hex: separatedLines[i].split(',')[3],
-        });
+  for (let i = 0; i < files.length; i++) {
+    try {
+      const singleFile = await parseFileService(files[i]);
+      if (singleFile) {
+        parsedFilesInfo.push(singleFile);
       }
+    } catch (err) {
+      console.error(`Error: Found error while trying to download ${files[i]}`)
     }
   }
 
-  return {
-    file: fileName,
-    lines: lines
-  };
+  return parsedFilesInfo.filter((file) => file.lines.length);
+}
+
+/**
+ * @description Get information of individual file from external API and format their data  
+ * @param  {string} name Name of the file to be returned  
+ * @returns {string} Rreturns file information and lines  
+ */
+const parseFileService = async (name) => {
+  const { data } = await axios.get(`https://echo-serv.tbxnet.com/v1/secret/file/${name}`, {
+    headers: { 'Authorization': bearerToken }
+  })
+
+  if (data.length && data.replace('file,text,number,hex', '').length)
+    return formatSingleFile(data.replace('file,text,number,hex\n', ''))
+  return false
+
+}
+
+/**
+ * @description Get list of filenames from original API 
+ * @returns {Array} Rreturns array of file names  
+ */
+const getFileNames = async () => {
+  const { data } = await axios.get(`https://echo-serv.tbxnet.com/v1/secret/files`, {
+    headers: { 'Authorization': bearerToken }
+  })
+
+  return data;
 }
 
 module.exports = {
+  parseAllFilesService,
   parseFileService,
+  getFileNames
 }
