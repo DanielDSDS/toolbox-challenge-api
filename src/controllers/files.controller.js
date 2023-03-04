@@ -24,7 +24,7 @@ const getParsedFilesInformation = async (req, res) => {
           parsedFilesInfo.push(FilesServices.parseFileService(singleFile.replace('file,text,number,hex\n', '')));
         }
       } catch (err) {
-        console.err(`Error: Found error while trying to download ${fileNames[i]}: `, err.response.data)
+        console.error(`Error: Found error while trying to download ${fileNames[i]}: `, err.response.data)
       }
     }
 
