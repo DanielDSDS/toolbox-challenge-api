@@ -2,8 +2,8 @@ const express = require('express')
 const dotenv = require('dotenv')
 const http = require('http')
 const morgan = require('morgan')
-const cors = require('compression')
-const compression = require('cors')
+const cors = require('cors')
+const compression = require('compression')
 const filesRouter = require('./routes/index')
 
 // Startup

@@ -28,9 +28,9 @@ const formatSingleFile = (file) => {
       if (!isLineEmpty(separatedLines[i].split(','))) {
         // Group each property from line into an array
         lines.push({
-          text: separatedLines[i].split(',')[0],
-          number: separatedLines[i].split(',')[1],
-          hex: separatedLines[i].split(',')[2]
+          text: separatedLines[i].split(',')[1],
+          number: separatedLines[i].split(',')[2],
+          hex: separatedLines[i].split(',')[3]
         })
       }
     }
